@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<script>
+    function parse_card() {
+        card = {};
+        fields = ['ones', 'twos', 'threes', 'fours', 'fives', 'sixes', 'three_of_a_kind', 'four_of_a_kind', 'full_house', 'small_straight', 'large_straight', 'yahtzee', 'bonus_yahtzee_count', 'chance']
+
+        for (var i = 0; i < fields.length; i++) {
+            content = document.getElementById(fields[i]).value
+            if (content == "") {
+                content = 0
+            }
+            card[fields[i]] = parseInt(content)
+        }
+
+        card['top_total'] = function() {
+            return this.ones + this.twos + this.threes + this.fours + this.fives + this.sixes
+        }
+        card['bottom_total'] = function() {
+            return this.three_of_a_kind + this.four_of_a_kind + this.full_house + this.small_straight + this.large_straight + this.yahtzee + this.chance
+        }
+
+        return card
+    }
+
+    function calculate_score() {
+
+        card = parse_card()
+
+        var top_total_input = document.getElementById("top_total");
+        var bottom_total = document.getElementById("bottom_total");
+        var grand_total = document.getElementById("grand_total");
+        var bonus = document.getElementById("bonus");
+        var el_down = document.getElementById("GFG_DOWN");
+
+        top_total = card.top_total()
+        if (top_total >= 63) {
+            top_total = top_total + 35
+            bonus.innerHTML = 35
+        } else {
+            bonus.innerHTML = 0
+        }
+        top_total_input.innerHTML = top_total;
+
+
+        bottom = card.bottom_total()
+        
+        yahtzee_bonus = 0
+        if (card.bonus_yahtzee_count > 0) {
+            yahtzee_bonus = 100 * card.bonus_yahtzee_count;
+        }
+
+        bottom_total.innerHTML = bottom + yahtzee_bonus;
+
+        total = bottom + top_total + yahtzee_bonus
+
+        grand_total.innerHTML = total;
+        el_down.innerHTML =
+            "Your score is: " + total;
+
+    }
+</script>
+<head>
+      <style>
+         table, th, th {
+            border: 1px solid black;
+         }
+      </style>
+      <title>
+          Yahtzee!
+      </title>
+</head>
+  <body>
+    <table>
+         <tr>
+            <th>1s</th>
+            <th><input type="text"  id="ones"></th>
+         </tr>
+         <tr>
+            <th>2s</th>
+            <th><input type="text"  id="twos"></th>
+         </tr>
+         <tr>
+            <th>3s</th>
+            <th><input type="text"  id="threes"></th>
+         </tr>
+         <tr>
+            <th>4s</th>
+            <th><input type="text"  id="fours"></th>
+         </tr>
+         <tr>
+            <th>5s</th>
+            <th><input type="text"  id="fives"></th>
+         </tr>
+         <tr>
+            <th>6s</th>
+            <th><input type="text"  id="sixes"></th>
+         </tr>
+         <tr>
+             <th><p>Bonus</p></th>
+             <th><p id="bonus"></th>
+         </tr>
+         <tr>
+             <th><p>Top Total</p></th>
+             <th><p id="top_total"></th>
+         </tr>
+         <tr>
+            <th>-</th>
+            <th>-</th>
+         </tr>
+         <tr>
+            <th>3 of a kind</th>
+            <th><input type="text"  id="three_of_a_kind"></th>
+         </tr>
+         <tr>
+             <th>4 of a kind</th>
+             <th><input type="text"  id="four_of_a_kind"></th>
+         </tr>
+         <tr>
+             <th>Full House (25)</th>
+             <th><input type="text"  id="full_house"></th>
+         </tr>
+         <tr>
+             <th>Small Straight (30)</th>
+             <th><input type="text"  id="small_straight"></th>
+         </tr>
+         <tr>
+             <th>Large Straight (40)</th>
+             <th><input type="text"  id="large_straight"></th>
+         </tr>
+         <tr>
+             <th>Yahtzee</th>
+             <th><input type="text"  id="yahtzee"></th>
+         </tr>
+         <tr>
+             <th>Bonus Yahtzees</th>
+             <th><input type="text"  id="bonus_yahtzee_count"></th>
+         </tr>
+         <tr>
+             <th>Chance</th>
+             <th><input type="text"  id="chance"></th>
+         </tr>
+         <tr>
+             <th><p>Bottom Total</p></th>
+             <th><p id="bottom_total"></th>
+         </tr>
+         <tr>
+             <th>-</th>
+             <th>-</th>
+         </tr>
+         <tr>
+             <th><p><button onclick="calculate_score()">Calculate Score</button></p></th>
+             <th><p id="grand_total"></th>
+         </tr>
+      </table>
+
+
+<p id="GFG_DOWN" style="color:green;
+                        font-size: 20px;
+                        font-weight: bold;">
+</p>
+
+
+
+
+</body>
+</html>
